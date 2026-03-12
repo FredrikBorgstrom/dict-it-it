@@ -28,6 +28,7 @@ where <input_file> is the raw Morph-it! lexicon file
 (e.g. morph-it_048.txt from the morph-it.tgz archive).
 """
 
+import os
 import sys
 import unicodedata
 
@@ -141,7 +142,13 @@ def process(input_path: str, output_path: str) -> None:
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 3:
-        print(f"Usage: {sys.argv[0]} <input_file> <output_file>")
+    _script_dir = os.path.dirname(os.path.abspath(__file__))
+    _default_input = os.path.join(_script_dir, 'morph-it_048.txt')
+    _default_output = os.path.join(_script_dir, 'output', 'italian_it_it_morphit.txt')
+    if len(sys.argv) > 3:
+        print(f"Usage: {sys.argv[0]} [input_file [output_file]]")
         sys.exit(1)
-    process(sys.argv[1], sys.argv[2])
+    _input = sys.argv[1] if len(sys.argv) > 1 else _default_input
+    _output = sys.argv[2] if len(sys.argv) > 2 else _default_output
+    os.makedirs(os.path.dirname(_output), exist_ok=True)
+    process(_input, _output)
